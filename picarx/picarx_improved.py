@@ -87,6 +87,7 @@ class Picarx(object):
         self.cali_dir_value = [int(i.strip()) for i in self.cali_dir_value.strip().strip("[]").split(",")]
         self.cali_speed_value = [0, 0]
         self.dir_current_angle = 0
+        self.dir_angle_value = 0 #cali+current angle
         # init pwm
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
@@ -169,10 +170,10 @@ class Picarx(object):
 
     def set_dir_servo_angle(self, value):
         self.dir_current_angle = constrain(value, self.DIR_MIN, self.DIR_MAX)
-        angle_value  = self.dir_current_angle + self.dir_cali_val
-        self.dir_servo_pin.angle(angle_value)
+        self.dir_angle_value  = self.dir_current_angle + self.dir_cali_val
+        self.dir_servo_pin.angle(self.dir_angle_value)
 
-        logging.debug(f"set_dir_servo_angle: {angle_value}")
+        logging.debug(f"set_dir_servo_angle: {self.dir_angle_value}")
 
     def cam_pan_servo_calibrate(self, value):
         self.cam_pan_cali_val = value
@@ -201,8 +202,8 @@ class Picarx(object):
         w = 0.12
 
         #Calculate inner and outer angles
-        inner_angle = math.atan((2*l*math.sin(self.dir_current_angle))/(2*l*math.cos(self.dir_current_angle) - w*math.sin(self.dir_current_angle)))
-        outer_angle = math.atan((2*l*math.sin(self.dir_current_angle))/(2*l*math.cos(self.dir_current_angle) + w*math.sin(self.dir_current_angle)))
+        inner_angle = math.atan((2*l*math.sin(self.dir_angle_value))/(2*l*math.cos(self.dir_angle_value) - w*math.sin(self.dir_angle_value)))
+        outer_angle = math.atan((2*l*math.sin(self.dir_angle_value))/(2*l*math.cos(self.dir_angle_value) + w*math.sin(self.dir_angle_value)))
         
         #If angles are zero set scaling to 1
         if (inner_angle == 0) or (outer_angle == 0):
