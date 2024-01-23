@@ -10,6 +10,8 @@ Press keys on keyboard to control PiCar-X!
     a: Backward and left
     s: Backward
     d: Backward and rifht
+    1: Parallel park to the left
+    2: Parallel park to the right
     ctrl+c: Press twice to exit the program
 '''
 
@@ -52,6 +54,29 @@ if __name__ == "__main__":
                     px.backward(50)
                 sleep(0.5)
                 px.forward(0)
+            
+            if key in('12'):
+                print('Parallel parking to the', end=' ')
+                if '1' == key:
+                    print('left.')
+                    px.set_dir_servo_angle(-15)
+                    px.forward(50)
+                    sleep(0.5)
+                    px.set_dir_servo_angle(15)
+                    px.forward(50)
+                    sleep(0.5)
+                    px.set_dir_servo_angle(0)
+                    px.backward(50)
+                elif '2' == key:
+                    print('left.')
+                    px.set_dir_servo_angle(15)
+                    px.forward(50)
+                    sleep(0.5)
+                    px.set_dir_servo_angle(-15)
+                    px.forward(50)
+                    sleep(0.5)
+                    px.set_dir_servo_angle(0)
+                    px.backward(50)
           
             elif key == readchar.key.CTRL_C:
                 print("\n Quit")
