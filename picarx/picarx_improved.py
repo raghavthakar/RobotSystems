@@ -261,9 +261,25 @@ class Picarx(object):
         return self.ultrasonic.read()
         
 class Sensor():
+    CONFIG = '/opt/picar-x/picar-x.conf'
+
+    DEFAULT_LINE_REF = [1000, 1000, 1000]
+    DEFAULT_CLIFF_REF = [500, 500, 500]
+
+    DIR_MIN = -30
+    DIR_MAX = 30
+    CAM_PAN_MIN = -90
+    CAM_PAN_MAX = 90
+    CAM_TILT_MIN = -35
+    CAM_TILT_MAX = 65
+
+    PERIOD = 4095
+    PRESCALER = 10
+    TIMEOUT = 0.02
+
     def __init__(self, grayscale_pins:list=['A0', 'A1', 'A2']) -> None:
         # --------- config_file ---------
-        self.config_file = fileDB('/opt/picar-x/picar-x.conf', 774, os.getlogin())
+        self.config_file = fileDB(self.CONFIG, 774, os.getlogin())
 
         # --------- grayscale module init ---------
         adc0, adc1, adc2 = [ADC(pin) for pin in grayscale_pins]
