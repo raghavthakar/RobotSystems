@@ -262,15 +262,49 @@ class Picarx(object):
         
 class Sensor():
     def __init__(self, grayscale_pins:list=['A0', 'A1', 'A2']) -> None:
+        # --------- config_file ---------
+        self.config_file = fileDB('/opt/picar-x/picar-x.conf', 774, os.getlogin())
+
         # --------- grayscale module init ---------
         adc0, adc1, adc2 = [ADC(pin) for pin in grayscale_pins]
         self.grayscale = Grayscale_Module(adc0, adc1, adc2, reference=None)
+        # get reference
+        self.line_reference = self.config_file.get("line_reference", default_value=str(self.DEFAULT_LINE_REF))
+        self.line_reference = [float(i) for i in self.line_reference.strip().strip('[]').split(',')]
+        self.cliff_reference = self.config_file.get("cliff_reference", default_value=str(self.DEFAULT_CLIFF_REF))
+        self.cliff_reference = [float(i) for i in self.cliff_reference.strip().strip('[]').split(',')]
+        # transfer reference
+        self.grayscale.reference(self.line_reference)
+
+    def set_grayscale_reference(self, value):
+        if isinstance(value, list) and len(value) == 3:
+            self.line_reference = value
+            self.grayscale.reference(self.line_reference)
+            self.config_file.set("line_reference", self.line_reference)
+        else:
+            raise ValueError("grayscale reference must be a 1*3 list")
 
     def get_grayscale_data(self):
         return list.copy(self.grayscale.read())
 
     def get_line_status(self,gm_val_list):
         return self.grayscale.read_status(gm_val_list)
+
+    def set_line_reference(self, value):
+        self.set_grayscale_reference(value)
+
+    def get_cliff_status(self,gm_val_list):
+        for i in range(0,3):
+            if gm_val_list[i]<=self.cliff_reference[i]:
+                return True
+        return False
+
+    def set_cliff_reference(self, value):
+        if isinstance(value, list) and len(value) == 3:
+            self.cliff_reference = value
+            self.config_file.set("cliff_reference", self.cliff_reference)
+        else:
+            raise ValueError("grayscale reference must be a 1*3 list")
 
 if __name__ == "__main__":
     px = Picarx()
