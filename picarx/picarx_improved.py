@@ -321,6 +321,23 @@ class Sensor():
             self.config_file.set("cliff_reference", self.cliff_reference)
         else:
             raise ValueError("grayscale reference must be a 1*3 list")
+    
+    def line_calibration(self):
+        max_reading = 0
+        min_reading = math.inf
+        for i in range(150):
+            sensor_readings = self.grayscale.read()
+            if max_reading < max(sensor_readings):
+                max_reading = max(sensor_readings)
+            if min_reading > min(sensor_readings):
+                min_reading = min(sensor_readings)
+            time.sleep(0.1)
+        
+        return max_reading, min_reading
+
+class Interpreter():
+    def __init__(self) -> None:
+        pass
 
 if __name__ == "__main__":
     px = Picarx()
