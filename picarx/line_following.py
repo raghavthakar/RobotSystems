@@ -5,3 +5,5 @@ import readchar
 if __name__ == "__main__":
     sensor = Sensor()
     print(sensor.line_calibration())
+    while True:
+        print(sensor.grayscale.read())
