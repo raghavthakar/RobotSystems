@@ -374,9 +374,15 @@ class Interpreter():
         self.prev_line_relative_pos = line_relative_pos
         return line_relative_pos
      
+class Controller():
+    def __init__(self, scale_factor = 15) -> None:
+        self.scale_factor = scale_factor
+    
+    def control(self, px, pos):
+        px.set_dir_servo_angle(self.scale_factor*pos)
 
 if __name__ == "__main__":
     px = Picarx()
     px.forward(50)
     time.sleep(1)
-    px.stop()
+    px.stop()   
