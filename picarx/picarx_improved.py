@@ -359,15 +359,15 @@ class Interpreter():
         line_relative_pos = 0
 
         if del_lc == 0 and del_cr == -self.dark_light_diff and del_rl == self.dark_light_diff:
-            line_relative_pos = -1 * self.line_is_dark_factor
-        elif del_lc == -self.dark_light_diff and del_cr == 0 and del_rl == self.dark_light_diff:
             line_relative_pos = -0.5 * self.line_is_dark_factor
+        elif del_lc == -self.dark_light_diff and del_cr == 0 and del_rl == self.dark_light_diff:
+            line_relative_pos = -1 * self.line_is_dark_factor
         elif del_lc == self.dark_light_diff and del_cr == 0 and del_rl == -self.dark_light_diff:
-            line_relative_pos = 1 * self.line_is_dark_factor
+            line_relative_pos = 0.5 * self.line_is_dark_factor
         elif del_lc == self.dark_light_diff and del_cr == -self.dark_light_diff and del_rl == 0:
             line_relative_pos = 0 * self.line_is_dark_factor
         elif del_lc == 0 and del_cr == self.dark_light_diff and del_rl == -self.dark_light_diff:
-            line_relative_pos = 0.5 * self.line_is_dark_factor
+            line_relative_pos = 1 * self.line_is_dark_factor
         else:
             line_relative_pos = self.prev_line_relative_pos
         
