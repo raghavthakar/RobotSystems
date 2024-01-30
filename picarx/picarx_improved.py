@@ -344,6 +344,8 @@ class Interpreter():
         del_cr = self.round_to_nearest(del_cr)
         del_rl = self.round_to_nearest(del_rl)
 
+        print(del_lc, del_cr, del_rl)
+
         line_relative_pos = 0
 
         if del_lc == 0 and del_cr == -self.dark_light_diff and del_rl == self.dark_light_diff:
