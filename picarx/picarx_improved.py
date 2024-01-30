@@ -321,39 +321,45 @@ class Sensor():
             self.config_file.set("cliff_reference", self.cliff_reference)
         else:
             raise ValueError("grayscale reference must be a 1*3 list")
-    
-    def line_calibration(self):
-        max_readings = []
-        min_readings = []
-        
-        for i in range(150):
-            sensor_readings = self.grayscale.read()
-            avg_reading = sum(sensor_readings) / len(sensor_readings)
-            
-            if len(max_readings) < 5:
-                max_readings.append(avg_reading)
-            else:
-                max_readings.pop(0)
-                max_readings.append(avg_reading)
-                
-            if len(min_readings) < 5:
-                min_readings.append(avg_reading)
-            else:
-                min_readings.pop(0)
-                min_readings.append(avg_reading)
-                
-            max_reading = max(max_readings)
-            min_reading = min(min_readings)
-            
-            time.sleep(0.1)
-        
-        return max_reading, min_reading
 
 class Interpreter():
-    def __init__(self, max_min_readings=(200, 100), line_colour="DARK") -> None:
-        # DARK = higher value
-        # LIGHT = lower value
-        pass
+    def __init__(self, line_is_dark=True, dark_light_diff=210) -> None:
+        # LIGHT = higher value
+        # DARK  = lower  value
+        self.line_is_dark_factor = 1 if line_is_dark else -1
+        self.dark_light_diff = dark_light_diff
+    
+    def round_to_nearest(self, value):
+        diffs = [value - self.dark_light_diff, value + self.dark_light_diff, value]
+        return min(diffs, key=lambda x: abs(x))
+
+    def get_line_relative_pos(self, sensor_reading, prev_line_relative_pos):
+
+        del_lc = sensor_reading[0] - sensor_reading[1]
+        del_cr = sensor_reading[1] - sensor_reading[2]
+        del_rl = sensor_reading[2] - sensor_reading[0]
+
+        del_lc = self.round_to_nearest(del_lc)
+        del_cr = self.round_to_nearest(del_cr)
+        del_rl = self.round_to_nearest(del_rl)
+
+        line_relative_pos = 0
+
+        if del_lc == 0 and del_cr == -self.dark_light_diff and del_rl == self.dark_light_diff:
+            line_relative_pos = -0.5 * self.line_is_dark_factor
+        elif del_lc == -self.dark_light_diff and del_cr == 0 and del_rl == self.dark_light_diff:
+            line_relative_pos = -1 * self.line_is_dark_factor
+        elif del_lc == self.dark_light_diff and del_cr == 0 and del_rl == -self.dark_light_diff:
+            line_relative_pos = 0.5 * self.line_is_dark_factor
+        elif del_lc == self.dark_light_diff and del_cr == -self.dark_light_diff and del_rl == 0:
+            line_relative_pos = 0 * self.line_is_dark_factor
+        elif del_lc == 0 and del_cr == self.dark_light_diff and del_rl == -self.dark_light_diff:
+            line_relative_pos = 1 * self.line_is_dark_factor
+        else:
+            line_relative_pos = prev_line_relative_pos
+        
+        return line_relative_pos
+     
 
 if __name__ == "__main__":
     px = Picarx()

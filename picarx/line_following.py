@@ -1,9 +1,10 @@
-from picarx_improved import Picarx, Sensor
+from picarx_improved import Picarx, Sensor, Interpreter
 from time import sleep
 import readchar
 
 if __name__ == "__main__":
     sensor = Sensor()
-    print(sensor.line_calibration())
+    interpreter = Interpreter()
+
     while True:
-        print(sensor.grayscale.read())
+        print(interpreter.get_line_relative_pos(sensor.grayscale.read()))
