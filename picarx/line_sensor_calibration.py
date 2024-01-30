@@ -10,10 +10,6 @@ if __name__ == "__main__":
     controller = Controller
 
     while True:
-        pos = interpreter.get_line_relative_pos(sensor.grayscale.read())
-        try:
-            px.forward(30)
-            px.set_dir_servo_angle(30*pos)
-        except:
-            pass
+        # pos = interpreter.get_line_relative_pos(sensor.grayscale.read())
+        print(sensor.grayscale.read())
         sleep(0.1)
