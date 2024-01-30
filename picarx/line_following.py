@@ -11,6 +11,7 @@ if __name__ == "__main__":
     while True:
         pos = interpreter.get_line_relative_pos(sensor.grayscale.read())
         try:
+            px.forward(40)
             px.set_dir_servo_angle(15*pos)
         except:
             pass
