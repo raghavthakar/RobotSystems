@@ -336,7 +336,9 @@ class Sensor():
         return max_reading, min_reading
 
 class Interpreter():
-    def __init__(self) -> None:
+    def __init__(self, max_min_readings=(200, 100), line_colour="DARK") -> None:
+        # DARK = higher value
+        # LIGHT = lower value
         pass
 
 if __name__ == "__main__":
