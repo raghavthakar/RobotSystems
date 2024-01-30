@@ -9,6 +9,9 @@ if __name__ == "__main__":
     controller = Controller
 
     while True:
-        pos = (interpreter.get_line_relative_pos(sensor.grayscale.read()))
-        controller.control(px, pos)
+        pos = interpreter.get_line_relative_pos(sensor.grayscale.read())
+        try:
+            controller.control(px, pos)
+        except:
+            pass
         sleep(0.1)
