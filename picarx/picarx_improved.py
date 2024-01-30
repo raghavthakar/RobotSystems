@@ -328,12 +328,13 @@ class Interpreter():
         # DARK  = lower  value
         self.line_is_dark_factor = 1 if line_is_dark else -1
         self.dark_light_diff = dark_light_diff
+        self.prev_line_relative_pos = 0
     
     def round_to_nearest(self, value):
         diffs = [value - self.dark_light_diff, value + self.dark_light_diff, value]
         return min(diffs, key=lambda x: abs(x))
 
-    def get_line_relative_pos(self, sensor_reading, prev_line_relative_pos):
+    def get_line_relative_pos(self, sensor_reading):
 
         del_lc = sensor_reading[0] - sensor_reading[1]
         del_cr = sensor_reading[1] - sensor_reading[2]
@@ -356,8 +357,9 @@ class Interpreter():
         elif del_lc == 0 and del_cr == self.dark_light_diff and del_rl == -self.dark_light_diff:
             line_relative_pos = 1 * self.line_is_dark_factor
         else:
-            line_relative_pos = prev_line_relative_pos
+            line_relative_pos = self.prev_line_relative_pos
         
+        self.prev_line_relative_pos = line_relative_pos
         return line_relative_pos
      
 
