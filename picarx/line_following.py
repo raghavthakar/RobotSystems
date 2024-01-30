@@ -11,7 +11,7 @@ if __name__ == "__main__":
     while True:
         pos = interpreter.get_line_relative_pos(sensor.grayscale.read())
         try:
-            controller.control(px, pos)
+            px.set_dir_servo_angle(15*pos)
         except:
             pass
         sleep(0.1)
