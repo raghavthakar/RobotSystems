@@ -323,14 +323,28 @@ class Sensor():
             raise ValueError("grayscale reference must be a 1*3 list")
     
     def line_calibration(self):
-        max_reading = 0
-        min_reading = math.inf
+        max_readings = []
+        min_readings = []
+        
         for i in range(150):
             sensor_readings = self.grayscale.read()
-            if max_reading < max(sensor_readings):
-                max_reading = max(sensor_readings)
-            if min_reading > min(sensor_readings):
-                min_reading = min(sensor_readings)
+            avg_reading = sum(sensor_readings) / len(sensor_readings)
+            
+            if len(max_readings) < 5:
+                max_readings.append(avg_reading)
+            else:
+                max_readings.pop(0)
+                max_readings.append(avg_reading)
+                
+            if len(min_readings) < 5:
+                min_readings.append(avg_reading)
+            else:
+                min_readings.pop(0)
+                min_readings.append(avg_reading)
+                
+            max_reading = max(max_readings)
+            min_reading = min(min_readings)
+            
             time.sleep(0.1)
         
         return max_reading, min_reading
