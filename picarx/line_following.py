@@ -5,7 +5,7 @@ import readchar
 if __name__ == "__main__":
     px = Picarx()
     sensor = Sensor()
-    interpreter = Interpreter()
+    interpreter = Interpreter(False)
     controller = Controller
 
     while True:
