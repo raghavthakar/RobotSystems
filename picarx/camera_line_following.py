@@ -20,8 +20,8 @@ class LineFollower:
         
         # Extract the bottom half of the frame
         self.height, self.width = self.frame.shape[:2]
-        bottom_half = self.frame[self.height//2:self.height, :]
-
+        bottom_half = self.frame[int(self.height//2):self.height, :]
+        #bottom_half = self.frame[self.height:self.height, :]
         gray = cv2.cvtColor(bottom_half, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray, (5, 5), 0)
         edges = cv2.Canny(blurred, 50, 150)
@@ -57,7 +57,7 @@ class LineFollower:
             
             # Print the normalized angle (value between -1 and 1)
             print("Normalized Angle:", normalized_angle)
-            cv2.imshow('Line Detection', self.frame)
+            # cv2.imshow('Line Detection', self.frame)
 
             return normalized_angle
 
@@ -68,6 +68,7 @@ class LineFollower:
 
 if __name__ == "__main__":
     px = Picarx()
+    px.set_cam_tilt_angle(-20)
     line_follower = LineFollower(camera_index=0)
     while True:
         line_follower.sense()
