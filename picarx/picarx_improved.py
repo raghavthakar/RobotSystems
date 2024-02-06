@@ -386,18 +386,19 @@ class Interpreter():
             time.sleep(delay_time)
 
 class Controller():
-    def __init__(self, scale_factor = 15) -> None:
+    def __init__(self, px, scale_factor = 15) -> None:
         self.scale_factor = scale_factor
+        self.px = px
     
     def control(self, px, pos):
         px.set_dir_servo_angle(self.scale_factor*pos)
     
-    def consume(self, readbus, px, delay_time):
+    def consume(self, readbus, delay_time):
         while True:
             pos = readbus.read()
             try:
-                px.forward(30)
-                px.set_dir_servo_angle(20*pos)
+                self.px.forward(30)
+                self.px.set_dir_servo_angle(20*pos)
             except:
                 pass
             time.sleep(delay_time)
