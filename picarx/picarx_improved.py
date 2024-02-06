@@ -322,6 +322,11 @@ class Sensor():
         else:
             raise ValueError("grayscale reference must be a 1*3 list")
 
+    def produce(self, writebus, delay_time):
+        while True:
+            writebus.write(self.grayscale.read())
+            time.sleep(delay_time)
+
 class Interpreter():
     def __init__(self, line_is_dark=True, dark_light_diff=210) -> None:
         # LIGHT = higher value
@@ -374,12 +379,36 @@ class Interpreter():
         self.prev_line_relative_pos = line_relative_pos
         return line_relative_pos
      
+    def consume_produce(self, readbus, writebus, delay_time):
+        while True:
+            line_relative_pos = self.get_line_relative_pos(readbus.read())
+            writebus.write(line_relative_pos)
+            time.sleep(delay_time)
+
 class Controller():
     def __init__(self, scale_factor = 15) -> None:
         self.scale_factor = scale_factor
     
     def control(self, px, pos):
         px.set_dir_servo_angle(self.scale_factor*pos)
+    
+    def consume(self, readbus, px, delay_time):
+        while True:
+            pos = readbus.read()
+            try:
+                px.forward(30)
+                px.set_dir_servo_angle(20*pos)
+            except:
+                pass
+            time.sleep(delay_time)
+
+class MessageBus():
+    def __init__(self) -> None:
+        self.message = None
+    def write(self, message):
+        self.message = message
+    def read(self):
+        return self.message
 
 if __name__ == "__main__":
     px = Picarx()
