@@ -397,8 +397,8 @@ class Controller():
         while True:
             pos = readbus.read()
             try:
-                self.px.forward(30)
-                self.px.set_dir_servo_angle(20*pos)
+                self.px.forward(25)
+                self.px.set_dir_servo_angle(35*pos)
             except:
                 pass
             time.sleep(delay_time)
