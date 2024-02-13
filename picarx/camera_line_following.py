@@ -68,14 +68,14 @@ class LineFollower:
 
 if __name__ == "__main__":
     px = Picarx()
-    px.set_cam_tilt_angle(-20)
+    px.set_cam_tilt_angle(-30)
     line_follower = LineFollower(camera_index=0)
     while True:
         line_follower.sense()
         pos = line_follower.interpret()
         try:
             px.forward(30)
-            px.set_dir_servo_angle(30*pos)
+            px.set_dir_servo_angle(40*pos)
         except:
             pass
 

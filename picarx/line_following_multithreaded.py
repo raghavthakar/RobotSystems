@@ -7,7 +7,7 @@ import concurrent.futures
 if __name__ == "__main__":
     px = Picarx()
     sensor = Sensor()
-    interpreter = Interpreter(True)
+    interpreter = Interpreter(False)
     controller = Controller(px)
     sensor_reading_bus = MessageBus()
     pos_bus = MessageBus()

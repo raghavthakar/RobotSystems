@@ -329,7 +329,7 @@ class Sensor():
             time.sleep(delay_time)
 
 class Interpreter():
-    def __init__(self, line_is_dark=True, dark_light_diff=210) -> None:
+    def __init__(self, line_is_dark=True, dark_light_diff=75) -> None:
         # LIGHT = higher value
         # DARK  = lower  value
         self.line_is_dark_factor = 1 if line_is_dark else -1
