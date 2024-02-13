@@ -10,7 +10,7 @@ if __name__ == "__main__":
     
     px = Picarx()
     sensor = Sensor()
-    interpreter = Interpreter(True)
+    interpreter = Interpreter(False)
     controller = Controller(px)
 
     ultra_sense = ultra_sensor()
@@ -19,8 +19,8 @@ if __name__ == "__main__":
     while (time() - start_time) < duration:
         pos = interpreter.get_line_relative_pos(sensor.grayscale.read())
         try:
-            px.forward(20 * ultra_interpret.process_reading())
-            px.set_dir_servo_angle(40 * pos)
+            px.forward(25 * ultra_interpret.process_reading())
+            px.set_dir_servo_angle(30 * pos)
         except Exception as e:
             print("An error occurred:", e)
         sleep(0.1)
