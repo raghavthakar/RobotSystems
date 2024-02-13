@@ -416,6 +416,45 @@ class MessageBus():
             message = self.message
         return message
 
+class ultra_sensor():
+    def __init__(self, trig=Pin('D2'), echo=Pin('D3')):
+        self.ultrasonic = Ultrasonic(trig, echo)
+        
+    def sensor_reading(self):
+        dist = self.ultrasonic.read()
+        return dist
+
+class ultra_interpreter():
+    def __init__(self, stop_dist = 5):
+        self.stop_dist = stop_dist
+        self.running_rdgs = [0.0,0.0,0.0]
+        
+    # return true if car should go forward
+    def process_reading(self, reading):
+        self.running_rdgs[0] = self.running_rdgs[1]
+        self.running_rdgs[1] = self.running_rdgs[2]
+        self.running_rdgs[2] = reading
+        avg_rdg = sum(self.running_rdgs) / 3
+        if avg_rdg > self.stop_dist:
+            return 1
+        return 0
+
+class ultra_controller():
+    def __init__(self, car=None, speed=55):
+        self.car = car
+        self.speed=speed
+    
+    def control(self, cmd):
+        if cmd:
+            print('Forward')
+            self.car.forward(self.speed+10)
+            sleep(0.1) # TODO <- this a problem??
+            self.car.forward(self.speed)
+        else:
+            print('Stop')
+            self.car.stop()
+     
+
 if __name__ == "__main__":
     px = Picarx()
     px.forward(50)
