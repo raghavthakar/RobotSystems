@@ -7,7 +7,7 @@ if __name__ == "__main__":
     px = Picarx()
     sensor = Sensor()
     interpreter = Interpreter(True)
-    controller = Controller
+    controller = Controller(px)
 
     while True:
         pos = interpreter.get_line_relative_pos(sensor.grayscale.read())

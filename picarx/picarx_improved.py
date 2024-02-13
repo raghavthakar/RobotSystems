@@ -448,7 +448,7 @@ class ultra_controller():
         if cmd:
             print('Forward')
             self.car.forward(self.speed+10)
-            sleep(0.1) # TODO <- this a problem??
+            time.sleep(0.1) # TODO <- this a problem??
             self.car.forward(self.speed)
         else:
             print('Stop')
