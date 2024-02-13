@@ -11,7 +11,7 @@ if __name__ == "__main__":
     px = Picarx()
     sensor = Sensor()
     interpreter = Interpreter(True)
-    controller = Controller()
+    controller = Controller(px)
 
     ultra_sense = ultra_sensor()
     ultra_interpret = ultra_interpreter(stop_dist=15)
