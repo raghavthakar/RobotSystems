@@ -19,7 +19,7 @@ if __name__ == "__main__":
     while (time() - start_time) < duration:
         pos = interpreter.get_line_relative_pos(sensor.grayscale.read())
         try:
-            px.forward(25 * ultra_interpret.process_reading())
+            px.forward(25 * ultra_interpret.process_reading(ultra_sense.sensor_reading()))
             px.set_dir_servo_angle(30 * pos)
         except Exception as e:
             print("An error occurred:", e)
